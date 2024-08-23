@@ -1,0 +1,1 @@
+protoc loginpb/login.proto --go-grpc_out=. --go_out=.   
