@@ -22,8 +22,8 @@ func main() {
 
 	// log.Printf("service client %f", client)
 
-	// callSum(client)
-	callPND(client)
+	callSum(client)
+	// callPND(client)
 }
 
 func callSum(c calculatorpb.CalculatorClient) {

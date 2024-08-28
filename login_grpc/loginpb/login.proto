@@ -4,5 +4,32 @@ package login_grpc;
 
 option go_package="./loginpb";
 
-service  Login {
+
+message User {
+  string username = 1;
+  string email = 2;
+  string password = 3;
 }
+
+message Credentials {
+  string username = 1;
+  string password = 2;
+}
+
+
+message ChangeUer{
+  string email = 1;
+  string password = 2;
+}
+message Token {
+  string token = 1;
+}
+
+service LoginService {
+  
+  rpc SignUp(User) returns (Token) {}
+  rpc Login(Credentials) returns (Token) {}
+  rpc Refreshing(ChangeUer) returns(Token){}
+}
+  
+ 

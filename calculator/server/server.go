@@ -24,7 +24,7 @@ func (*server) Sum(ctx context.Context, req *calculatorpb.SumRequest) (*calculat
 }
 
 func (*server) PrimeNumberDecomposition(req *calculatorpb.PNDRequest,
-	stream grpc.ServerStreamingServer[calculatorpb.PNDResponse]) error {
+	stream calculatorpb.Calculator_PrimeNumberDecompositionServer) error {
 	fmt.Println("primeNumberDecomposition called...")
 	k := int32(2)
 	N := req.GetNumber()
