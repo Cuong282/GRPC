@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net/http"
 	"time"
 
 	"example.com/loginpb"
@@ -28,7 +29,8 @@ func SignUp(c loginpb.LoginServiceClient) {
 	fmt.Println(req)
 	fmt.Println(cred)
 	if len(cred) <= 6 {
-		fmt.Println("len:", len(cred))
+		fmt.Println("password not long enough :", len(cred))
+		fmt.Println("check signup:", http.StatusBadRequest, cred)
 		return
 	}
 	hash, err := bcrypt.GenerateFromPassword([]byte(cred), 10)
@@ -62,16 +64,22 @@ func SignUp(c loginpb.LoginServiceClient) {
 // lognin
 func LogIn(c loginpb.LoginServiceClient) {
 	log.Println("login accout:")
-	req := &loginpb.Credentials{Username: "cuong", Password: "123456"}
-	c.Login(context.Background(), req)
-	fmt.Println(req)
-	// -----------------------------
+	req := &loginpb.Credentials{Username: "manh", Password: "1234567"}
+	log.Println("login accout by:", req)
+	resp, err := c.Login(context.Background(), req)
+	if err != nil {
+		log.Println("error logging in:", err)
+		return
+	}
 
-	fmt.Println("tokentring:", c)
+	// if resp.Token != req.Password {
+	// 	log.Println("error username or pass")
+	// 	return
+	// }
 
+	tokenString := resp.Token
+	fmt.Println("tokenString:", tokenString)
 }
-
-
 
 func main() {
 	cc, err := grpc.Dial("localhost:8080", grpc.WithInsecure())
@@ -84,7 +92,7 @@ func main() {
 	defer cc.Close()
 
 	client := loginpb.NewLoginServiceClient(cc)
-	SignUp(client)
+	// SignUp(client)
 	LogIn(client)
 
 }

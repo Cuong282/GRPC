@@ -12,6 +12,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type userService struct {
@@ -36,26 +38,27 @@ func (s *server) SignUp(ctx context.Context, req *loginpb.User) (*loginpb.Token,
 
 	}
 	fmt.Println("check signup:", http.StatusOK, check)
-	// resp, err := req.Password(context.Background(), req)
-	// if err != nil {
-	// 	return
-	// }
-	// fmt.Println("response:", resp)
+
 	return &loginpb.Token{Token: "dummy-token"}, nil
 
 }
-
 func (s *server) Login(ctx context.Context, req *loginpb.Credentials) (*loginpb.Token, error) {
-	log.Println("login sucsses", req)
+	log.Println("login success", req)
 
-	// err = db.QueryRowxContext(context.Background(), "SELECT id, email, password FROM userr WHERE Email = ?", req.Username, req.Password).StructScan(&loginpb.User{})
-	// if err != niL {
-	// 	fmt.Println("errdb11:", err)
-	// }
-	return nil, nil
+	var user loginpb.User
+	err := db.QueryRowxContext(context.Background(), "SELECT username,email, password FROM login WHERE username = ?", req.Username).StructScan(&user)
+	if err != nil {
+		log.Println("error querying database:", err)
+		log.Printf("username: %s", req.Username)
+		return nil, status.Errorf(codes.InvalidArgument, "invalid username or password")
+	}
+
+	if req.Password != user.Password {
+		log.Println("invalid password")
+		return nil, status.Errorf(codes.InvalidArgument, "invalid username or password")
+	}
+	return &loginpb.Token{Token: "login_success"}, nil
 }
-
-
 
 func main() {
 	db, errDb = sqlx.Open("mysql", "root:123456@tcp(127.0.0.1:3306)/login")

@@ -27,6 +27,21 @@ type LoginServiceClient interface {
 	Refreshing(ctx context.Context, in *ChangeUer, opts ...grpc.CallOption) (*Token, error)
 }
 
+// // Header implements http.ResponseWriter.
+// func (l LoginServiceClient) Header() http.Header {
+// 	panic("unimplemented")
+// }
+
+// // Write implements http.ResponseWriter.
+// func (l LoginServiceClient) Write([]byte) (int, error) {
+// 	panic("unimplemented")
+// }
+
+// // WriteHeader implements http.ResponseWriter.
+// func (l LoginServiceClient) WriteHeader(statusCode int) {
+// 	panic("unimplemented")
+// }
+
 type loginServiceClient struct {
 	cc grpc.ClientConnInterface
 }
