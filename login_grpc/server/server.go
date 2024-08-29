@@ -60,6 +60,33 @@ func (s *server) Login(ctx context.Context, req *loginpb.Credentials) (*loginpb.
 	return &loginpb.Token{Token: "login_success"}, nil
 }
 
+func (s *server) ChangeUser(ctx context.Context, req *loginpb.ChangeUer) (*loginpb.Token, error) {
+	log.Println("change user request", req)
+
+	var user loginpb.User
+	err := db.QueryRowxContext(context.Background(), "SELECT id, email, password FROM login WHERE username = ?", req.Email).StructScan(&user)
+	if err != nil {
+		log.Println("error querying database:", err)
+		return nil, status.Errorf(codes.InvalidArgument, "invalid old username")
+	}
+
+	// Check if the old password matches the stored password
+	if req.Password != user.Password {
+		log.Println("invalid old password")
+		return nil, status.Errorf(codes.InvalidArgument, "invalid old password")
+	}
+
+	// Update the username and password
+	_, err = db.ExecContext(context.Background(), "UPDATE userr SET Email = ?, Password = ? WHERE id = ?", req.Email, req.Password, user)
+	if err != nil {
+		log.Println("error updating database:", err)
+		return nil, status.Errorf(codes.Internal, "failed to update user")
+	}
+
+	// Return a success response
+	return &loginpb.Token{Token: "change_user_success"}, nil
+}
+
 func main() {
 	db, errDb = sqlx.Open("mysql", "root:123456@tcp(127.0.0.1:3306)/login")
 	fmt.Println("connect seccest", db, errDb)

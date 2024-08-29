@@ -64,21 +64,23 @@ func SignUp(c loginpb.LoginServiceClient) {
 // lognin
 func LogIn(c loginpb.LoginServiceClient) {
 	log.Println("login accout:")
-	req := &loginpb.Credentials{Username: "manh", Password: "1234567"}
+	req := &loginpb.Credentials{Username: "manh", Password: "123456788"}
 	log.Println("login accout by:", req)
 	resp, err := c.Login(context.Background(), req)
 	if err != nil {
-		log.Println("error logging in:", err)
+		log.Println("error logging in%s", err)
 		return
 	}
-
-	// if resp.Token != req.Password {
-	// 	log.Println("error username or pass")
-	// 	return
-	// }
-
 	tokenString := resp.Token
 	fmt.Println("tokenString:", tokenString)
+}
+
+// Refreshing
+
+func ChangeUer(c loginpb.LoginServiceClient) {
+	req := &loginpb.Credentials{Username: "dung", Password: "123456"}
+	fmt.Println("change Refreshing:", req)
+
 }
 
 func main() {
@@ -93,6 +95,7 @@ func main() {
 
 	client := loginpb.NewLoginServiceClient(cc)
 	// SignUp(client)
-	LogIn(client)
+	// LogIn(client)
+	ChangeUer(client)
 
 }
