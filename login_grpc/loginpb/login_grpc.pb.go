@@ -22,25 +22,10 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type LoginServiceClient interface {
-	SignUp(ctx context.Context, in *User, opts ...grpc.CallOption) (*Token, error)
-	Login(ctx context.Context, in *Credentials, opts ...grpc.CallOption) (*Token, error)
-	Refreshing(ctx context.Context, in *ChangeUer, opts ...grpc.CallOption) (*Token, error)
+	SignUp(ctx context.Context, in *ChangeUer, opts ...grpc.CallOption) (*Token, error)
+	Login(ctx context.Context, in *ChangeUer, opts ...grpc.CallOption) (*Token, error)
+	ChangeUerProfile(ctx context.Context, in *ChangeUer, opts ...grpc.CallOption) (*Token, error)
 }
-
-// // Header implements http.ResponseWriter.
-// func (l LoginServiceClient) Header() http.Header {
-// 	panic("unimplemented")
-// }
-
-// // Write implements http.ResponseWriter.
-// func (l LoginServiceClient) Write([]byte) (int, error) {
-// 	panic("unimplemented")
-// }
-
-// // WriteHeader implements http.ResponseWriter.
-// func (l LoginServiceClient) WriteHeader(statusCode int) {
-// 	panic("unimplemented")
-// }
 
 type loginServiceClient struct {
 	cc grpc.ClientConnInterface
@@ -50,7 +35,7 @@ func NewLoginServiceClient(cc grpc.ClientConnInterface) LoginServiceClient {
 	return &loginServiceClient{cc}
 }
 
-func (c *loginServiceClient) SignUp(ctx context.Context, in *User, opts ...grpc.CallOption) (*Token, error) {
+func (c *loginServiceClient) SignUp(ctx context.Context, in *ChangeUer, opts ...grpc.CallOption) (*Token, error) {
 	out := new(Token)
 	err := c.cc.Invoke(ctx, "/login_grpc.LoginService/SignUp", in, out, opts...)
 	if err != nil {
@@ -59,7 +44,7 @@ func (c *loginServiceClient) SignUp(ctx context.Context, in *User, opts ...grpc.
 	return out, nil
 }
 
-func (c *loginServiceClient) Login(ctx context.Context, in *Credentials, opts ...grpc.CallOption) (*Token, error) {
+func (c *loginServiceClient) Login(ctx context.Context, in *ChangeUer, opts ...grpc.CallOption) (*Token, error) {
 	out := new(Token)
 	err := c.cc.Invoke(ctx, "/login_grpc.LoginService/Login", in, out, opts...)
 	if err != nil {
@@ -68,9 +53,9 @@ func (c *loginServiceClient) Login(ctx context.Context, in *Credentials, opts ..
 	return out, nil
 }
 
-func (c *loginServiceClient) Refreshing(ctx context.Context, in *ChangeUer, opts ...grpc.CallOption) (*Token, error) {
+func (c *loginServiceClient) ChangeUerProfile(ctx context.Context, in *ChangeUer, opts ...grpc.CallOption) (*Token, error) {
 	out := new(Token)
-	err := c.cc.Invoke(ctx, "/login_grpc.LoginService/Refreshing", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/login_grpc.LoginService/ChangeUerProfile", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -81,9 +66,9 @@ func (c *loginServiceClient) Refreshing(ctx context.Context, in *ChangeUer, opts
 // All implementations must embed UnimplementedLoginServiceServer
 // for forward compatibility
 type LoginServiceServer interface {
-	SignUp(context.Context, *User) (*Token, error)
-	Login(context.Context, *Credentials) (*Token, error)
-	Refreshing(context.Context, *ChangeUer) (*Token, error)
+	SignUp(context.Context, *ChangeUer) (*Token, error)
+	Login(context.Context, *ChangeUer) (*Token, error)
+	ChangeUerProfile(context.Context, *ChangeUer) (*Token, error)
 	mustEmbedUnimplementedLoginServiceServer()
 }
 
@@ -91,14 +76,14 @@ type LoginServiceServer interface {
 type UnimplementedLoginServiceServer struct {
 }
 
-func (UnimplementedLoginServiceServer) SignUp(context.Context, *User) (*Token, error) {
+func (UnimplementedLoginServiceServer) SignUp(context.Context, *ChangeUer) (*Token, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SignUp not implemented")
 }
-func (UnimplementedLoginServiceServer) Login(context.Context, *Credentials) (*Token, error) {
+func (UnimplementedLoginServiceServer) Login(context.Context, *ChangeUer) (*Token, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
 }
-func (UnimplementedLoginServiceServer) Refreshing(context.Context, *ChangeUer) (*Token, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Refreshing not implemented")
+func (UnimplementedLoginServiceServer) ChangeUerProfile(context.Context, *ChangeUer) (*Token, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChangeUerProfile not implemented")
 }
 func (UnimplementedLoginServiceServer) mustEmbedUnimplementedLoginServiceServer() {}
 
@@ -114,7 +99,7 @@ func RegisterLoginServiceServer(s grpc.ServiceRegistrar, srv LoginServiceServer)
 }
 
 func _LoginService_SignUp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(User)
+	in := new(ChangeUer)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -126,13 +111,13 @@ func _LoginService_SignUp_Handler(srv interface{}, ctx context.Context, dec func
 		FullMethod: "/login_grpc.LoginService/SignUp",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LoginServiceServer).SignUp(ctx, req.(*User))
+		return srv.(LoginServiceServer).SignUp(ctx, req.(*ChangeUer))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _LoginService_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Credentials)
+	in := new(ChangeUer)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -144,25 +129,25 @@ func _LoginService_Login_Handler(srv interface{}, ctx context.Context, dec func(
 		FullMethod: "/login_grpc.LoginService/Login",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LoginServiceServer).Login(ctx, req.(*Credentials))
+		return srv.(LoginServiceServer).Login(ctx, req.(*ChangeUer))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _LoginService_Refreshing_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _LoginService_ChangeUerProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ChangeUer)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(LoginServiceServer).Refreshing(ctx, in)
+		return srv.(LoginServiceServer).ChangeUerProfile(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/login_grpc.LoginService/Refreshing",
+		FullMethod: "/login_grpc.LoginService/ChangeUerProfile",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LoginServiceServer).Refreshing(ctx, req.(*ChangeUer))
+		return srv.(LoginServiceServer).ChangeUerProfile(ctx, req.(*ChangeUer))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -183,8 +168,8 @@ var LoginService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _LoginService_Login_Handler,
 		},
 		{
-			MethodName: "Refreshing",
-			Handler:    _LoginService_Refreshing_Handler,
+			MethodName: "ChangeUerProfile",
+			Handler:    _LoginService_ChangeUerProfile_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

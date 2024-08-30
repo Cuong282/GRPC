@@ -1,0 +1,37 @@
+2024/08/30 11:29:19.537586 server.go:107: log file created
+2024/08/30 11:29:19.539149 server.go:121: gRPC server listening on port 8080
+2024/08/30 11:29:27.279599 server.go:66: server.ChangeUser - request username:"cuong" password:"1234567899" 
+2024/08/30 11:29:27.280743 server.go:84: server.ChangeUser - error updating database: Error 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE username = ?, password = ?' at line 1
+2024/08/30 11:29:34.020706 server.go:66: server.ChangeUser - request username:"cuong" password:"1234567899" 
+2024/08/30 11:29:34.021322 server.go:84: server.ChangeUser - error updating database: Error 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE username = ?, password = ?' at line 1
+2024/08/30 11:29:59.526239 server.go:66: server.ChangeUser - request username:"cuong" password:"1234567899" 
+2024/08/30 11:29:59.526778 server.go:84: server.ChangeUser - error updating database: Error 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE username = ?, password = ?' at line 1
+2024/08/30 11:31:38.940687 server.go:66: server.ChangeUser - request username:"cuong" password:"1234567899" 
+2024/08/30 11:31:38.941201 server.go:84: server.ChangeUser - error updating database: Error 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE username = ?, password = ?' at line 1
+2024/08/30 11:32:07.612606 server.go:48: login success username:"manh" password:"12345678910" 
+2024/08/30 11:32:07.613116 server.go:66: server.ChangeUser - request username:"cuong" password:"1234567899" 
+2024/08/30 11:32:07.613644 server.go:84: server.ChangeUser - error updating database: Error 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE username = ?, password = ?' at line 1
+2024/08/30 11:32:11.071163 server.go:107: log file created
+2024/08/30 11:32:11.072755 server.go:121: gRPC server listening on port 8080
+2024/08/30 11:32:14.322803 server.go:48: login success username:"manh" password:"12345678910" 
+2024/08/30 11:32:14.323311 server.go:66: server.ChangeUser - request username:"cuong" password:"1234567899" 
+2024/08/30 11:32:14.324338 server.go:84: server.ChangeUser - error updating database: Error 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE username = ?, password = ?' at line 1
+2024/08/30 11:32:49.480135 server.go:107: log file created
+2024/08/30 11:32:49.481663 server.go:121: gRPC server listening on port 8080
+2024/08/30 11:32:53.287037 server.go:48: login success username:"manh" password:"12345678910" 
+2024/08/30 11:37:03.140954 server.go:48: login success username:"manh" password:"12345678910" 
+2024/08/30 11:37:18.203628 server.go:48: login success username:"manh" password:"12345678910" 
+2024/08/30 11:37:18.204139 server.go:66: server.ChangeUser - request username:"cuong" password:"1234567899" 
+2024/08/30 11:37:18.205159 server.go:84: server.ChangeUser - error updating database: Error 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE username = ?, password = ?' at line 1
+2024/08/30 11:37:30.983116 server.go:48: login success username:"manh" password:"12345678910" 
+2024/08/30 11:37:30.983628 server.go:66: server.ChangeUser - request username:"cuong" password:"1234567899" 
+2024/08/30 11:37:30.984166 server.go:84: server.ChangeUser - error updating database: Error 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE username = ?, password = ?' at line 1
+2024/08/30 14:20:51.248579 server.go:102: log file created
+2024/08/30 14:20:51.250132 server.go:116: gRPC server listening on port 8080
+2024/08/30 14:20:55.133171 server.go:66: server.ChangeUser - request username:"cuong" password:"1234567899" 
+2024/08/30 14:20:55.135364 server.go:80: server.ChangeUser - error updating database: Error 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'username = ?' at line 1
+2024/08/30 14:21:28.721729 server.go:103: log file created
+2024/08/30 14:21:28.722750 server.go:117: gRPC server listening on port 8080
+2024/08/30 14:22:27.472781 server.go:102: log file created
+2024/08/30 14:22:27.473319 server.go:103: kkkkkkk
+2024/08/30 14:22:27.474374 server.go:117: gRPC server listening on port 8080

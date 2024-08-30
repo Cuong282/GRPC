@@ -7,6 +7,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"os"
 
 	"example.com/loginpb"
 	_ "github.com/go-sql-driver/mysql"
@@ -29,10 +30,10 @@ type server struct {
 	loginpb.LoginServiceServer
 }
 
-func (s *server) SignUp(ctx context.Context, req *loginpb.User) (*loginpb.Token, error) {
+func (s *server) SignUp(ctx context.Context, req *loginpb.ChangeUer) (*loginpb.Token, error) {
 	log.Println("singup sucsses", req)
 
-	check, err := db.Exec("INSERT INTO login (username,email, password) VALUES (?,?,?)", req.Username, req.Email, req.Password)
+	check, err := db.Exec("INSERT INTO login (id,username,password) VALUES (?,?,?)", req.Id, req.Username, req.Password)
 	if err != nil {
 		fmt.Println("errr", http.StatusBadRequest)
 
@@ -42,52 +43,65 @@ func (s *server) SignUp(ctx context.Context, req *loginpb.User) (*loginpb.Token,
 	return &loginpb.Token{Token: "dummy-token"}, nil
 
 }
-func (s *server) Login(ctx context.Context, req *loginpb.Credentials) (*loginpb.Token, error) {
+
+func (s *server) Login(ctx context.Context, req *loginpb.ChangeUer) (*loginpb.Token, error) {
 	log.Println("login success", req)
 
-	var user loginpb.User
-	err := db.QueryRowxContext(context.Background(), "SELECT username,email, password FROM login WHERE username = ?", req.Username).StructScan(&user)
-	if err != nil {
-		log.Println("error querying database:", err)
-		log.Printf("username: %s", req.Username)
-		return nil, status.Errorf(codes.InvalidArgument, "invalid username or password")
-	}
+	// var user loginpb.User
+	// err := db.QueryRowxContext(context.Background(), "SELECT id,username,password FROM login WHERE username = ?", req.Username).StructScan(&user)
+	// if err != nil {
+	// 	log.Println("error querying database:", err)
+	// 	log.Printf("username: %s", req.Username)
+	// 	return nil, status.Errorf(codes.InvalidArgument, "invalid username or password")
+	// }
 
-	if req.Password != user.Password {
-		log.Println("invalid password")
-		return nil, status.Errorf(codes.InvalidArgument, "invalid username or password")
-	}
+	// if req.Password != user.Password {
+	// 	log.Println("invalid password")
+	// 	return nil, status.Errorf(codes.InvalidArgument, "invalid username or password")
+	// }
 	return &loginpb.Token{Token: "login_success"}, nil
 }
 
-func (s *server) ChangeUser(ctx context.Context, req *loginpb.ChangeUer) (*loginpb.Token, error) {
-	log.Println("change user request", req)
+func (s *server) ChangeUerProfile(ctx context.Context, req *loginpb.ChangeUer) (*loginpb.Token, error) {
+	log.Println("server.ChangeUser - request", req)
 
 	var user loginpb.User
-	err := db.QueryRowxContext(context.Background(), "SELECT id, email, password FROM login WHERE username = ?", req.Email).StructScan(&user)
+	err := db.QueryRowxContext(context.Background(), "SELECT username, password FROM login WHERE username = ?", req.Username).StructScan(&user)
 	if err != nil {
-		log.Println("error querying database:", err)
+		log.Println("server.ChangeUser - error querying database:", err)
 		return nil, status.Errorf(codes.InvalidArgument, "invalid old username")
 	}
-
-	// Check if the old password matches the stored password
-	if req.Password != user.Password {
-		log.Println("invalid old password")
-		return nil, status.Errorf(codes.InvalidArgument, "invalid old password")
-	}
+	fmt.Println(">>>>>>>>>", req.Password)
+	fmt.Println("?????????????????", user.Password)
 
 	// Update the username and password
-	_, err = db.ExecContext(context.Background(), "UPDATE userr SET Email = ?, Password = ? WHERE id = ?", req.Email, req.Password, user)
+	_, err = db.ExecContext(context.Background(), "UPDATE login SET  password = ?  username = ?", req.Password, req.Username)
 	if err != nil {
-		log.Println("error updating database:", err)
+		log.Println("server.ChangeUser - error updating database:", err)
 		return nil, status.Errorf(codes.Internal, "failed to update user")
 	}
 
-	// Return a success response
 	return &loginpb.Token{Token: "change_user_success"}, nil
 }
 
+func openLogFile(path string) (*os.File, error) {
+	logFile, err := os.OpenFile(path, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
+	
+	if err != nil {
+		return nil, err
+	}
+	return logFile, nil
+}
+
 func main() {
+	file, err := openLogFile("./error.log")
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.SetOutput(file)
+	log.SetFlags(log.LstdFlags | log.Lshortfile | log.Lmicroseconds)
+	log.Println("log file created")
+	log.Println("kkkkkkk")
 	db, errDb = sqlx.Open("mysql", "root:123456@tcp(127.0.0.1:3306)/login")
 	fmt.Println("connect seccest", db, errDb)
 	if errDb != nil {
