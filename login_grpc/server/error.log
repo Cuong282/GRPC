@@ -35,3 +35,16 @@
 2024/08/30 14:22:27.472781 server.go:102: log file created
 2024/08/30 14:22:27.473319 server.go:103: kkkkkkk
 2024/08/30 14:22:27.474374 server.go:117: gRPC server listening on port 8080
+2024/08/30 16:41:42.976062 server.go:103: log file created
+2024/08/30 16:41:42.976599 server.go:104: kkkkkkk
+2024/08/30 16:41:42.977636 server.go:118: gRPC server listening on port 8080
+2024/08/30 16:41:47.156109 server.go:66: server.ChangeUser - request username:"dung" password:"1234567899" 
+2024/08/30 16:41:47.160806 server.go:80: server.ChangeUser - error updating database: Error 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'username = ?' at line 1
+2024/09/04 09:19:36.004565 server.go:103: log file created
+2024/09/04 09:19:36.005077 server.go:104: kkkkkkk
+2024/09/04 09:19:36.006098 server.go:118: gRPC server listening on port 8080
+2024/09/04 09:19:54.123141 server.go:66: server.ChangeUser - request username:"dung" password:"1234567899" 
+2024/09/04 09:19:54.126080 server.go:80: server.ChangeUser - error updating database: Error 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'username = ?' at line 1
+2024/09/06 10:20:13.722574 server.go:103: log file created
+2024/09/06 10:20:13.723600 server.go:104: kkkkkkk
+2024/09/06 10:20:13.724628 server.go:118: gRPC server listening on port 8080

@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package chatpb;
+
+option go_package="./chatpb";
+
+message User1 {
+    int32 id = 1;
+    string send = 2;
+}
+message User2 {
+    int32 id = 1;
+    string send = 2;
+}
+
+message Token{
+    string Token = 3;
+}
+
+service ChatService {
+    rpc ChatUser1(User1) returns(Token){}
+    rpc ChatUser2(User2) returns(Token){}
+}
