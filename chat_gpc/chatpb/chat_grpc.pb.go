@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type ChatServiceClient interface {
 	ChatUser1(ctx context.Context, in *User1, opts ...grpc.CallOption) (*Token, error)
 	ChatUser2(ctx context.Context, in *User2, opts ...grpc.CallOption) (*Token, error)
+	SendMessage(ctx context.Context, in *Message, opts ...grpc.CallOption) (*Message, error)
 }
 
 type chatServiceClient struct {
@@ -52,12 +53,22 @@ func (c *chatServiceClient) ChatUser2(ctx context.Context, in *User2, opts ...gr
 	return out, nil
 }
 
+func (c *chatServiceClient) SendMessage(ctx context.Context, in *Message, opts ...grpc.CallOption) (*Message, error) {
+	out := new(Message)
+	err := c.cc.Invoke(ctx, "/chatpb.ChatService/SendMessage", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ChatServiceServer is the server API for ChatService service.
 // All implementations must embed UnimplementedChatServiceServer
 // for forward compatibility
 type ChatServiceServer interface {
 	ChatUser1(context.Context, *User1) (*Token, error)
 	ChatUser2(context.Context, *User2) (*Token, error)
+	SendMessage(context.Context, *Message) (*Message, error)
 	mustEmbedUnimplementedChatServiceServer()
 }
 
@@ -70,6 +81,9 @@ func (UnimplementedChatServiceServer) ChatUser1(context.Context, *User1) (*Token
 }
 func (UnimplementedChatServiceServer) ChatUser2(context.Context, *User2) (*Token, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ChatUser2 not implemented")
+}
+func (UnimplementedChatServiceServer) SendMessage(context.Context, *Message) (*Message, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SendMessage not implemented")
 }
 func (UnimplementedChatServiceServer) mustEmbedUnimplementedChatServiceServer() {}
 
@@ -120,6 +134,24 @@ func _ChatService_ChatUser2_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ChatService_SendMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Message)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ChatServiceServer).SendMessage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/chatpb.ChatService/SendMessage",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ChatServiceServer).SendMessage(ctx, req.(*Message))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ChatService_ServiceDesc is the grpc.ServiceDesc for ChatService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -134,6 +166,10 @@ var ChatService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ChatUser2",
 			Handler:    _ChatService_ChatUser2_Handler,
+		},
+		{
+			MethodName: "SendMessage",
+			Handler:    _ChatService_SendMessage_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

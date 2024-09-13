@@ -9,32 +9,19 @@ import (
 
 func main() {
 	fmt.Println("Starting the server ...")
-	// create listener:
-	ln, err := net.Listen("tcp", "0.0.0.0:3306")
+	ln, err := net.Listen("tcp", "0.0.0.0:8081")
 	if err != nil {
 		fmt.Println("Error listening", err.Error())
-		return // terminate program
+		return
 	}
 	fmt.Println(">>>>>>>>>>>>")
 	for {
 		conn, err := ln.Accept()
 		if err != nil {
-			return // terminate program
+			return
 		}
-		// go doServerStuff(conn)
+		fmt.Println("calling handleConnection")
 		go handleConnection(conn)
-	}
-}
-
-func doServerStuff(conn net.Conn) {
-	for {
-		buf := make([]byte, 512)
-		_, err := conn.Read(buf)
-		if err != nil {
-			fmt.Println("Error reading", err.Error())
-			return // terminate program
-		}
-		fmt.Printf("Received data: %v", string(buf))
 	}
 }
 

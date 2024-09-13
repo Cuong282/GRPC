@@ -13,11 +13,21 @@ message User2 {
     string send = 2;
 }
 
+
+
 message Token{
     string Token = 3;
+}
+
+message Message {
+    string text = 1;
+    string sender = 2;
+    string receiver = 3;
 }
 
 service ChatService {
     rpc ChatUser1(User1) returns(Token){}
     rpc ChatUser2(User2) returns(Token){}
+    rpc SendMessage(Message) returns (Message) {}
+    
 }
